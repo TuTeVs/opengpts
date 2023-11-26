@@ -1,3 +1,48 @@
+# RUN
+
+1. backend
+pipenv shell
+cd backend
+langchain serve --port=8100
+
+2. frontend
+create new terminal:
+
+cd frontend
+yarn
+yarn dev
+
+http://localhost:5173/
+
+
+# INSTALL ISSUES FIX:
+STEPS TO GET IT WORKING ON WINDOWS 10:
+
+1. Install packages
+pip install -e
+pip install -e .packages/agent-executor
+pip install -e .packages/gizmo-agent
+
+2. Set up Redis cloud
+
+FROM REDIS CLOUD:
+
+username is "default"
+pass can be found in databases
+port is the public url
+
+{redis://username:password@hostname:port}
+
+set it in system variables (win10)
+
+3. Fix errors:
+pipenv install permchain
+
+in system variables, set YDC_API_KEY + KAY_API_KEY to a placeholder
+
+pipenv install python-multipart
+
+
 # OpenGPTs
 
 This is an open source effort to create a similar experience to OpenAI's GPTs and Assistants API.
@@ -29,11 +74,15 @@ OpenGPTs gives you more control, allowing you to configure:
 ```shell
 cd backend
 pip install -r requirements.txt
+# pip install -e
+# pip install -e .packages/agent-executor
+# pip install -e .packages/gizmo-agent
+# THIS IS HOW IT WORKED BEFORE
 ```
 
 **Set up persistence layer**
 
-The backed by default uses Redis for saving agent configurations and chat message history.
+The backend by default uses Redis for saving agent configurations and chat message history.
 In order to you use this, you need to a `REDIS_URL` variable.
 
 ```shell
