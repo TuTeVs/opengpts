@@ -8,6 +8,7 @@ langchain serve --port=8100
 2. frontend
 create new terminal:
 
+pipenv shell
 cd frontend
 yarn
 yarn dev
