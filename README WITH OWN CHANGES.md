@@ -10,7 +10,7 @@ create new terminal:
 
 pipenv shell
 cd frontend
-yarn
+yarn (can skip this)
 yarn dev
 
 http://localhost:5173/
@@ -27,7 +27,10 @@ pip install -e .packages/gizmo-agent
 or just randomly works in backend folder:
 pip install -r -requirements.txt
 
-2. Set up Redis cloud
+2. REDIS SET UP FOR VECTOR BASE 
+Either Redis cloud or docker instance
+
+# 2.0 Set up Redis cloud 
 
 FROM REDIS CLOUD:
 
@@ -39,17 +42,56 @@ port is the public url
 
 set it in system variables (win10)
 
+# 2.1. Set up a redis docker instance
+
+docker run -d --name redis-search -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+
+to check whether the instance is running:
+docker ps
+
+Install RedisInsight (GUI for Redis databases)
+(It should automatically map to port 6379)
+
+Go to workbench -> create index and paste this:
+(This will create an index for opengpts)
+``` 
+FT.CREATE "opengpts" // Index name
+    ON HASH // Indicates the type of data to index
+        PREFIX 1 "opengpts:" // The prefix pattern to index
+    SCHEMA
+        "namespace" TAG SORTABLE // Assuming 'namespace' is a tag field that should be sortable
+        "content_vector" VECTOR FLAT // For "content vector" create a Flat index.
+            10 // 10 index parameters follow
+            "TYPE" "FLOAT32" // only FLOAT32 is currently supported
+            "DIM" 1536 // Each vector will have 1536 dimensions
+            "DISTANCE_METRIC" "COSINE" // Other values could be "IP" "L2"
+            "INITIAL_CAP" 5 // Pre-Allocate memory for vectors per shard
+            "BLOCK_SIZE" 5 // Block size for the index
+
+```
+
+Paste this in REDIS_URL system variable (Windows system variables - environment variables - New (bottom table) and create a "REDIS_URL" variable with the key below)
+redis://localhost:6379
+
+Use RedisInsight, if you want to enter the client
+
 3. Fix errors:
 pipenv install permchain
 
 in system variables, set YDC_API_KEY + KAY_API_KEY to a placeholder
 
 pipenv install python-multipart
+pipenv install python-magic
+pipenv install python-magic-bin
+(SET MAGIC environment variables): system variables -> New (name: "MAGIC", value: D:\Programming\virtual-environments\opengpts-jWuklAkf\Lib\site-packages\magic\libmagic)
 
-4. If you get a Typeerror:
+pipenv install tiktoken
 
-Reinstall pydantic to resolve the TypeError issue.
+4. If you get a Typerror:
+
+Reinstall pydantic to resolve the TypeError issue. (TypeError: BaseModel.validate() takes 2 positional arguments but 3 were given)
 pip install pydantic==1.10.13
+
 
 
 

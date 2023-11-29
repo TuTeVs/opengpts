@@ -4,7 +4,7 @@ import orjson
 from fastapi import FastAPI, Form, UploadFile
 from fastapi.staticfiles import StaticFiles
 from gizmo_agent import ingest_runnable
-
+import logging
 from app.api import router as api_router
 
 app = FastAPI(title="OpenGPTs API")
@@ -20,6 +20,7 @@ app.include_router(api_router)
 @app.post("/ingest", description="Upload files to the given assistant.")
 def ingest_files(files: list[UploadFile], config: str = Form(...)) -> None:
     """Ingest a list of files."""
+    logging.info("Ingesting files")
     config = orjson.loads(config)
     return ingest_runnable.batch([file.file for file in files], config)
 
