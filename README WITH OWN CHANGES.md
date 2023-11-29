@@ -24,6 +24,9 @@ pip install -e
 pip install -e .packages/agent-executor
 pip install -e .packages/gizmo-agent
 
+or just randomly works in backend folder:
+pip install -r -requirements.txt
+
 2. Set up Redis cloud
 
 FROM REDIS CLOUD:
@@ -42,6 +45,13 @@ pipenv install permchain
 in system variables, set YDC_API_KEY + KAY_API_KEY to a placeholder
 
 pipenv install python-multipart
+
+4. If you get a Typeerror:
+
+Reinstall pydantic to resolve the TypeError issue.
+pip install pydantic==1.10.13
+
+
 
 
 # OpenGPTs
